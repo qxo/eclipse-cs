@@ -32,6 +32,7 @@ import com.puppycrawl.tools.checkstyle.PackageObjectFactory.ModuleLoadOption;
 import com.puppycrawl.tools.checkstyle.PropertyResolver;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
+import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -41,6 +42,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.sf.eclipsecs.core.CheckstylePlugin;
+import net.sf.eclipsecs.core.CheckstylePluginPrefs;
 import net.sf.eclipsecs.core.config.CheckstyleConfigurationFile;
 import net.sf.eclipsecs.core.config.ICheckConfiguration;
 import net.sf.eclipsecs.core.config.configtypes.IContextAware;
@@ -128,6 +130,8 @@ public final class CheckerFactory {
       Long modified = Long.valueOf(configFileData.getModificationStamp());
       sCheckerMap.put(cacheKey, checker);
       sModifiedMap.put(cacheKey, modified);
+    } else {
+      setLocaleIfChanged(checker);
     }
 
     return checker;
@@ -232,11 +236,7 @@ public final class CheckerFactory {
       CheckstylePluginException.rethrow(e);
     }
 
-    // set the eclipse platform locale
-    Locale platformLocale = CheckstylePlugin.getPlatformLocale();
-    checker.setLocaleLanguage(platformLocale.getLanguage());
-    checker.setLocaleCountry(platformLocale.getCountry());
-
+    setLocale(checker, getLocale());
     checker.configure(configuration);
 
     // reset the basedir if it is set so it won't get into the plugins way
@@ -246,5 +246,36 @@ public final class CheckerFactory {
     checker.setBasedir(null);
 
     return checker;
+  }
+
+  private static void setLocaleIfChanged(final Checker checker) {
+    final String lc = getLocale();
+    if (lc != null && !lc.equals(CheckstylePlugin.getPlatformLocale().getLanguage())) {
+      setLocale(checker, lc);
+    }
+  }
+
+  private static void setLocale(final Checker checker, final String lc) {
+    final String lastLocale;
+    if (lc != null) {
+      lastLocale = lc;
+      checker.setLocaleLanguage(lc);
+      checker.setLocaleCountry("");
+      final Locale locale = new Locale(lc);
+      LocalizedMessage.setLocale(locale);
+      CheckstylePlugin.setPlatformLocale(locale);
+    } else {
+      // set the eclipse platform locale
+      final Locale platformLocale = CheckstylePlugin.getPlatformLocale();
+      lastLocale = platformLocale.getLanguage();
+      checker.setLocaleLanguage(lastLocale);
+      checker.setLocaleCountry(platformLocale.getCountry());
+      LocalizedMessage.setLocale(platformLocale);
+    }
+  }
+
+  public static String getLocale() {
+    final String lc = CheckstylePluginPrefs.getString(CheckstylePluginPrefs.PREF_LOCALE_LANGUAGE);
+    return lc != null && !lc.isEmpty() && !"default".equals(lc) ? lc : null;
   }
 }

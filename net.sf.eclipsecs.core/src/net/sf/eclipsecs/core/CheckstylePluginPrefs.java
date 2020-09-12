@@ -67,6 +67,11 @@ public class CheckstylePluginPrefs extends AbstractPreferenceInitializer {
   public static final int MARKER_LIMIT = 100;
 
   /**
+   * Preference checkstyle rule language.
+   */
+  public static final String PREF_LOCALE_LANGUAGE = "checkstyle_rule_language"; //$NON-NLS-1$
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -84,6 +89,18 @@ public class CheckstylePluginPrefs extends AbstractPreferenceInitializer {
     } catch (BackingStoreException e) {
       CheckstyleLog.log(e);
     }
+  }
+
+  /**
+   * Returns a string preference for the given preference id.
+   * 
+   * @param prefId
+   *          the preference id
+   * @return the string result
+   */
+  public static String getString(String prefId) {
+    final IPreferencesService prefs = Platform.getPreferencesService();
+    return prefs.getString(CheckstylePlugin.PLUGIN_ID, prefId, null, null);
   }
 
   /**
@@ -110,6 +127,24 @@ public class CheckstylePluginPrefs extends AbstractPreferenceInitializer {
 
     IPreferencesService prefs = Platform.getPreferencesService();
     return prefs.getInt(CheckstylePlugin.PLUGIN_ID, prefId, 0, null);
+  }
+
+  /**
+   * Set a string preference for the given preference id.
+   * 
+   * @param prefId
+   *          the preference id
+   * @param value
+   *          the string value
+   * @throws BackingStoreException
+   *           if this operation cannot be completed due to a failure in the
+   *           backing store, or inability to communicate with it.
+   */
+  public static void setString(String prefId, String value) throws BackingStoreException {
+
+    IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(CheckstylePlugin.PLUGIN_ID);
+    prefs.put(prefId, value);
+    prefs.flush();
   }
 
   /**

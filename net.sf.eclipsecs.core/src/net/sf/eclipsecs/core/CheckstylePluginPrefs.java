@@ -32,7 +32,7 @@ import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * Class for handling preferences of the <code>net.sf.eclipsecs.core</code> plugin.
- * 
+ *
  * @author Lars Ködderitzsch
  */
 public class CheckstylePluginPrefs extends AbstractPreferenceInitializer {
@@ -69,7 +69,7 @@ public class CheckstylePluginPrefs extends AbstractPreferenceInitializer {
   /**
    * Preference checkstyle rule language.
    */
-  public static final String PREF_LOCALE_LANGUAGE = "checkstyle_rule_language"; //$NON-NLS-1$
+  public static final String PREF_LOCALE_LANGUAGE = "checkstyle_rule_language";
 
   /**
    * {@inheritDoc}
@@ -93,7 +93,7 @@ public class CheckstylePluginPrefs extends AbstractPreferenceInitializer {
 
   /**
    * Returns a string preference for the given preference id.
-   * 
+   *
    * @param prefId
    *          the preference id
    * @return the string result
@@ -105,7 +105,7 @@ public class CheckstylePluginPrefs extends AbstractPreferenceInitializer {
 
   /**
    * Returns a boolean preference for the given preference id.
-   * 
+   *
    * @param prefId
    *          the preference id
    * @return the boolean result
@@ -118,7 +118,7 @@ public class CheckstylePluginPrefs extends AbstractPreferenceInitializer {
 
   /**
    * Returns an integer preference for the given preference id.
-   * 
+   *
    * @param prefId
    *          the preference id
    * @return the integer result
@@ -131,7 +131,7 @@ public class CheckstylePluginPrefs extends AbstractPreferenceInitializer {
 
   /**
    * Set a string preference for the given preference id.
-   * 
+   *
    * @param prefId
    *          the preference id
    * @param value
@@ -140,16 +140,16 @@ public class CheckstylePluginPrefs extends AbstractPreferenceInitializer {
    *           if this operation cannot be completed due to a failure in the
    *           backing store, or inability to communicate with it.
    */
-  public static void setString(String prefId, String value) throws BackingStoreException {
-
-    IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(CheckstylePlugin.PLUGIN_ID);
+  public static void setString(final String prefId, final String value)
+          throws BackingStoreException {
+    final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode(CheckstylePlugin.PLUGIN_ID);
     prefs.put(prefId, value);
     prefs.flush();
   }
 
   /**
    * Set a boolean preference for the given preference id.
-   * 
+   *
    * @param prefId
    *          the preference id
    * @param value
@@ -167,7 +167,7 @@ public class CheckstylePluginPrefs extends AbstractPreferenceInitializer {
 
   /**
    * Set a int preference for the given preference id.
-   * 
+   *
    * @param prefId
    *          the preference id
    * @param value

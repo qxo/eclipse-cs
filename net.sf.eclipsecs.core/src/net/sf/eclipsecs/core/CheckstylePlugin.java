@@ -109,14 +109,13 @@ public class CheckstylePlugin extends Plugin {
    */
   public static Locale getPlatformLocale() {
     if (platformLocale == null) {
-      String nl = Platform.getNL();
-      String[] parts = nl.split("_"); //$NON-NLS-1$
-
-      String language = parts.length > 0 ? parts[0] : ""; //$NON-NLS-1$
-      String country = parts.length > 1 ? parts[1] : ""; //$NON-NLS-1$
-      String variant = parts.length > 2 ? parts[2] : ""; //$NON-NLS-1$
-
-      platformLocale =  new Locale(language, country, variant);
+      final String language = Platform.getNL();
+      final String[] parts = language.split("_");
+      if (parts.length > 0) {
+        platformLocale = new Locale(parts[0]);
+      } else {
+        platformLocale = Locale.getDefault();
+      }
     }
     return platformLocale;
   }

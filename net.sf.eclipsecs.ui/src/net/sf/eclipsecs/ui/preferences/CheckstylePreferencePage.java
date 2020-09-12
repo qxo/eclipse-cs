@@ -42,7 +42,6 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -52,7 +51,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -187,13 +185,12 @@ public class CheckstylePreferencePage extends PreferencePage implements IWorkben
     langComposite.setLayout(gridLayout);
     langComposite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-    Label lblLanguage = new Label(langComposite, SWT.NULL);
+    final Label lblLanguage = new Label(langComposite, SWT.NULL);
     lblLanguage.setText(Messages.CheckstylePreferencePage_lblLocaleLanguage);
-
     mLanguageIf = new Combo(langComposite, SWT.READ_ONLY);
     mLanguageIf.setItems(Messages.CheckstylePreferencePage_lblLocaleLanguages.split("[, ;]+"));
-    final String ruleLang = CheckstylePluginPrefs.getString(CheckstylePluginPrefs.PREF_LOCALE_LANGUAGE);
-    final int selectedLang = mLanguageIf.indexOf(ruleLang == null || ruleLang.isEmpty() ? "default" : ruleLang);
+    final String lang = CheckstylePluginPrefs.getString(CheckstylePluginPrefs.PREF_LOCALE_LANGUAGE);
+    final int selectedLang = mLanguageIf.indexOf(lang == null || lang.isEmpty() ? "default" : lang);
     if (selectedLang != -1) {
       mLanguageIf.select(selectedLang);
     }

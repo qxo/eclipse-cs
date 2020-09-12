@@ -255,13 +255,13 @@ public final class CheckerFactory {
     }
   }
 
-  private static void setLocale(final Checker checker, final String lc) {
+  private static void setLocale(final Checker checker, final String lang) {
     final String lastLocale;
-    if (lc != null) {
-      lastLocale = lc;
-      checker.setLocaleLanguage(lc);
+    if (lang != null) {
+      lastLocale = lang;
+      checker.setLocaleLanguage(lang);
       checker.setLocaleCountry("");
-      final Locale locale = new Locale(lc);
+      final Locale locale = new Locale(lang);
       LocalizedMessage.setLocale(locale);
       CheckstylePlugin.setPlatformLocale(locale);
     } else {
@@ -274,8 +274,11 @@ public final class CheckerFactory {
     }
   }
 
-  public static String getLocale() {
-    final String lc = CheckstylePluginPrefs.getString(CheckstylePluginPrefs.PREF_LOCALE_LANGUAGE);
-    return lc != null && !lc.isEmpty() && !"default".equals(lc) ? lc : null;
+  private static String getLocale() {
+    String lang = CheckstylePluginPrefs.getString(CheckstylePluginPrefs.PREF_LOCALE_LANGUAGE);
+    if (lang != null && (lang.isEmpty() || "default".equals(lang))) {
+      lang = null;
+    }
+    return lang;
   }
 }
